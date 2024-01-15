@@ -3,15 +3,24 @@ services:
     build: ./api
     ports:
       - "3000:3000"
+    links:
+      - db:db
     depends_on:
       - db
-    command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "3000" ]
+    # volumes:
+    #   - api_volume:/app/audio_files
 
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "3000"]
   db:
     build: ./db
+    ports:
+      - "5432:5432"
 
   # frontend:
   # TODO: add frontend service
+
+# volumes:
+#   api_volume:
 
 networks:
   default:
