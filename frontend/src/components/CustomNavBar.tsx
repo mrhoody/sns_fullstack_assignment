@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export default function CustomNavBar() {
+const CustomNavBar: React.FC = () => {
   return (
     <Navbar>
       <Container>
@@ -14,17 +14,19 @@ export default function CustomNavBar() {
 
         <Navbar.Collapse className="justify-content-start">
           <Nav>
-            <Nav.Link href="/myaccount">Home</Nav.Link>
+            <Nav.Link href="/me">Home</Nav.Link>
             <Nav.Link href="/manageaccount">Manage My Account</Nav.Link>
           </Nav>
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
           <Nav>
-            <Button>Log Out</Button>
+            <Button href="/login">Log Out</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
+};
+
+export default CustomNavBar;

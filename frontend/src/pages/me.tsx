@@ -7,6 +7,8 @@ import CustomAudioPlayer from "@/components/CustomAudioPlayer";
 import UploadedFilesDisplay from "@/components/UploadedFilesDisplay";
 import CustomNavBar from "@/components/CustomNavBar";
 import UploadAudio from "@/components/UploadAudio";
+import UserCard from "@/components/UserCard";
+import { useState } from "react";
 
 const files = [
   {
@@ -24,15 +26,25 @@ const files = [
     file_size: "size2",
   },
 ];
+
 const MyAccountPage: React.FC = () => {
+  const [usernameState, setUsernameState] = useState<string>("Username123");
+  const [nameState, setNameState] = useState<string>("Default Name");
+  const [phoneNumberState, setPhoneNumberState] = useState<string>("123456");
+
   return (
     <Container>
       <CustomNavBar />
-      <h2>Welcome, Hud!</h2>
+      <h2>Welcome, {nameState}!</h2>
       <Stack gap={5}>
         <Row>
           <Col>
-            <h4>My Account</h4>
+            <h4>More About Me</h4>
+            <UserCard
+              username={usernameState}
+              name={nameState}
+              phoneNumber={phoneNumberState}
+            />
             <a href="/manageaccount">Manage My Account</a>
           </Col>
         </Row>
@@ -47,7 +59,7 @@ const MyAccountPage: React.FC = () => {
         <Row>
           <Col>
             <h4>My Audio</h4>
-            <UploadedFilesDisplay files={files} />
+            <UploadedFilesDisplay />
           </Col>
         </Row>
 

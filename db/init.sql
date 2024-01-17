@@ -16,6 +16,8 @@ CREATE TABLE sns_db.audio_files (
     file_name VARCHAR(255) NOT NULL UNIQUE,
     file_path VARCHAR(255) NOT NULL UNIQUE,
     file_type VARCHAR(255) NOT NULL,
+    file_category VARCHAR(255) NOT NULL,
+    file_description VARCHAR(255) NOT NULL,
     file_duration VARCHAR(255) NOT NULL,
     file_bitrate VARCHAR(255) NOT NULL,
     file_sample_rate VARCHAR(255) NOT NULL,
