@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useState, useEffect } from "react";
-import { postEndpointHelper } from "../../endpoint_utils";
+import { postEndpointHelper } from "../utils/endpoint-utils";
 
 const RegisterPage: React.FC = () => {
   const [registerEnabledState, setRegisterEnabledState] =

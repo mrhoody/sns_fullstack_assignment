@@ -1,15 +1,25 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import CustomNavBar from "@/components/CustomNavBar";
-import { postEndpointHelper } from "../../endpoint_utils";
+import { postEndpointHelper } from "../utils/endpoint-utils";
+import ProtectedRoute from "@/components/VerifyLogin";
+import { getCookie, setCookie, CookieValueTypes } from "cookies-next";
+import { deleteAllCookies } from "@/utils/cookie-utils";
 
 const ManageAccountPage: React.FC = () => {
+  const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
+
+  useLayoutEffect(() => {
+    setCookie("loggedIn", "true");
+    setLoggedIn(getCookie("loggedIn"));
+  }, []);
+
   const [updateEnabledState, setUpdateEnabledState] = useState<boolean>(false);
   const [nameState, setNameState] = useState<string>("");
   const [phoneNumberState, setPhoneNumberState] = useState<string>("");
@@ -30,10 +40,30 @@ const ManageAccountPage: React.FC = () => {
       phone_number: phoneNumberState,
     });
     const resp_json = await resp.json();
-    console.log(resp_json);
+    if (resp.status !== 200) {
+      throw alert(resp_json.message);
+    } else {
+    }
   }
 
-  return (
+  async function handleAccountDelete() {
+    const resp = await postEndpointHelper("delete-account", {
+      user_id: "1",
+    });
+    const resp_json = await resp.json();
+    if (resp_json.status_code !== 200) {
+      throw alert(
+        `Status code ${resp_json.status_code}: ${resp_json.message} `
+      );
+    } else {
+      // redirect to login page
+      console.log(resp_json.message);
+      console.log(resp_json);
+      // window.location.href = "/login";
+    }
+  }
+
+  return loggedIn === "true" ? (
     <Container>
       <CustomNavBar />
       <h2>Manage My Account</h2>
@@ -106,12 +136,24 @@ const ManageAccountPage: React.FC = () => {
         <Row>
           <Col>
             <h4>Had enough?</h4>
-            <Button variant="danger" type="submit" href="/">
+            <Button
+              variant="danger"
+              type="button"
+              onClick={() => {
+                // handleAccountDelete();
+                // deleteAllCookies();
+                setCookie("loggedIn", "true");
+              }}
+            >
               Delete Account & Data
             </Button>
           </Col>
         </Row>
       </Stack>
+    </Container>
+  ) : (
+    <Container>
+      <ProtectedRoute />
     </Container>
   );
 };

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { postEndpointHelper } from "../../endpoint_utils";
+import { postEndpointHelper } from "../utils/endpoint-utils";
 
 const UploadAudio: React.FC = () => {
   const [uploadEnabledState, setUploadEnabledState] = useState<boolean>(false);
@@ -27,13 +27,13 @@ const UploadAudio: React.FC = () => {
   }, [audioDescriptionState, audioCategoryState, audioFileState]);
 
   async function handleAudioUpload() {
-    // const response = await postEndpointHelper("upload-audio", {
-    //   audio_description: audioDescriptionState,
-    //   audio_category: audioCategoryState,
-    //   audio_file: audioFileState,
-    // });
-    // const response_json = await response.json();
-    // console.log(response_json);
+    const response = await postEndpointHelper("upload-audio", {
+      audio_description: audioDescriptionState,
+      audio_category: audioCategoryState,
+      audio_file: audioFileState,
+    });
+    const response_json = await response.json();
+    console.log(response_json);
   }
 
   return (

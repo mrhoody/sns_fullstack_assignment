@@ -21,7 +21,14 @@ const CustomNavBar: React.FC = () => {
 
         <Navbar.Collapse className="justify-content-end">
           <Nav>
-            <Button href="/login">Log Out</Button>
+            <Button
+              href="/login"
+              onClick={() => {
+                localStorage.clear();
+              }}
+            >
+              Log Out
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>

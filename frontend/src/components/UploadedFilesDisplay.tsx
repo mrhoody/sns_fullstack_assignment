@@ -2,7 +2,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
-import { postEndpointHelper } from "../../endpoint_utils";
+import { postEndpointHelper } from "../utils/endpoint-utils";
 import { Col, Row } from "react-bootstrap";
 
 interface UploadedFilesInfo {

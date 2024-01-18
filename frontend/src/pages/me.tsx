@@ -8,7 +8,10 @@ import UploadedFilesDisplay from "@/components/UploadedFilesDisplay";
 import CustomNavBar from "@/components/CustomNavBar";
 import UploadAudio from "@/components/UploadAudio";
 import UserCard from "@/components/UserCard";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import ProtectedRoute from "@/components/VerifyLogin";
+import Button from "react-bootstrap/Button";
+import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
 
 const files = [
   {
@@ -28,11 +31,18 @@ const files = [
 ];
 
 const MyAccountPage: React.FC = () => {
+  const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
+
+  useLayoutEffect(() => {
+    setCookie("loggedIn", "true");
+    setLoggedIn(getCookie("loggedIn"));
+  }, []);
+
   const [usernameState, setUsernameState] = useState<string>("Username123");
   const [nameState, setNameState] = useState<string>("Default Name");
   const [phoneNumberState, setPhoneNumberState] = useState<string>("123456");
 
-  return (
+  return loggedIn === "true" ? (
     <Container>
       <CustomNavBar />
       <h2>Welcome, {nameState}!</h2>
@@ -69,6 +79,11 @@ const MyAccountPage: React.FC = () => {
           </Col>
         </Row>
       </Stack>
+      <Button onClick={() => {}}>LMAOOO</Button>
+    </Container>
+  ) : (
+    <Container>
+      <ProtectedRoute />
     </Container>
   );
 };
