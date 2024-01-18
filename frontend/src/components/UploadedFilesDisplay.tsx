@@ -8,15 +8,16 @@ import { Col, Row } from "react-bootstrap";
 import { getCookie } from "cookies-next";
 
 interface UploadedFilesInfo {
+  id: string;
   file_name: string;
   file_path: string;
   file_type: string;
   file_category: string;
   file_description: string;
-  file_duration: string;
+  file_duration: number;
   file_upload_date: string;
   file_sample_rate: string;
-  file_size: string;
+  file_size: number;
 }
 
 interface UploadFileDisplayProps {
@@ -54,10 +55,9 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
               <th>File Type</th>
               <th>File Category</th>
               <th>File Description</th>
-              <th>File Duration</th>
-              <th>File Upload Date</th>
-              <th>File Sample Rate</th>
-              <th>File Size</th>
+              <th>File Duration (s)</th>
+              <th>File Sample Rate (Hz)</th>
+              <th>File Size (MB)</th>
             </tr>
           </thead>
           {files.length === 0 && (
@@ -74,14 +74,19 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
           )}
           {files.map((file) => (
             <tr>
+              <td>{file.id}</td>
               <td>{file.file_name}</td>
               <td>{file.file_type}</td>
               <td>{file.file_category}</td>
               <td>{file.file_description}</td>
-              <td>{file.file_duration}</td>
-              <td>{file.file_upload_date}</td>
+              <td>{Number(file.file_duration).toFixed(1)}</td>
               <td>{file.file_sample_rate}</td>
-              <td>{file.file_size}</td>
+              <td>{Number(file.file_size / 1000000).toFixed(2)}</td>
+              <td>
+                <center>
+                  <Button type="button">Click to Load Audio</Button>
+                </center>
+              </td>
             </tr>
           ))}
         </Table>
