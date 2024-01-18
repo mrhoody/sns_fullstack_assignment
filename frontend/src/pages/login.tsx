@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { postEndpointHelper } from "../utils/endpoint-utils";
 import { useState, useEffect } from "react";
+import { setCookie, getCookie } from "cookies-next";
 
 const LoginPage: React.FC = () => {
   const [loginEnabledState, setLoginEnabledState] = useState<boolean>(false);
@@ -26,7 +27,17 @@ const LoginPage: React.FC = () => {
       password: passwordState,
     });
     const resp_json = await resp.json();
-    console.log(resp_json);
+    if (resp_json.status_code !== 200) {
+      throw alert(`Status code ${resp_json.status_code}: ${resp_json.message}`);
+    } else {
+      console.log(resp_json);
+      setCookie("loggedIn", "true");
+      setCookie("userName", resp_json.user_data.username);
+      setCookie("name", resp_json.user_data.name);
+      setCookie("phoneNumber", resp_json.user_data.phone_number);
+      setCookie("userId", resp_json.user_data.user_id);
+      window.location.href = "/me";
+    }
   }
 
   return (
@@ -63,9 +74,6 @@ const LoginPage: React.FC = () => {
               disabled={!loginEnabledState}
               onClick={() => {
                 // login logic here
-                console.log("Login button clicked!");
-                console.log("Username: " + usernameState);
-                console.log("Password: " + passwordState);
                 handleLogin();
               }}
             >

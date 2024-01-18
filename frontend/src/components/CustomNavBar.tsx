@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { deleteAllCookies } from "@/utils/cookie-utils";
 
 const CustomNavBar: React.FC = () => {
   return (
@@ -24,7 +25,7 @@ const CustomNavBar: React.FC = () => {
             <Button
               href="/login"
               onClick={() => {
-                localStorage.clear();
+                deleteAllCookies();
               }}
             >
               Log Out

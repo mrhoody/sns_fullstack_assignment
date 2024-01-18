@@ -1,5 +1,5 @@
-curl http://0.0.0.0:3000/login -X POST -H "Content-Type: multipart/form-data" -F "username"="admin" -F "password"="admin"
+curl http://0.0.0.0:5000/login -X POST -H "Content-Type: multipart/form-data" -F "username"="admin" -F "password"="admin"
 
-curl http://0.0.0.0:3000/upload-audio-file -X POST -H "Content-Type: multipart/form-data" -F "user_id"="1" -F "audio_file"=@file_example_MP3_1MG.mp3
+curl http://0.0.0.0:5000/upload-audio-file -X POST -H "Content-Type: multipart/form-data" -F "user_id"="1" -F "audio_file"=@file_example_MP3_1MG.mp3
 
-curl http://0.0.0.0:3000/playback-audio-file -X POST -H "Content-Type: multipart/form-data" -F "audio_id"="1"
+curl http://0.0.0.0:5000/playback-audio-file -X POST -H "Content-Type: multipart/form-data" -F "audio_id"="1"

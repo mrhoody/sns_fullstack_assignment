@@ -10,37 +10,32 @@ import UploadAudio from "@/components/UploadAudio";
 import UserCard from "@/components/UserCard";
 import { useLayoutEffect, useState } from "react";
 import ProtectedRoute from "@/components/VerifyLogin";
-import Button from "react-bootstrap/Button";
-import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
+import { CookieValueTypes, getCookie } from "cookies-next";
+import { checkCookieExists } from "@/utils/cookie-utils";
 
-const files = [
-  {
-    file_name: "file1",
-    file_path: "path1",
-    file_type: "type1",
-    file_duration: "duration1",
-    file_size: "size1",
-  },
-  {
-    file_name: "file2",
-    file_path: "path2",
-    file_type: "type2",
-    file_duration: "duration2",
-    file_size: "size2",
-  },
-];
 
 const MyAccountPage: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
 
   useLayoutEffect(() => {
-    setCookie("loggedIn", "true");
     setLoggedIn(getCookie("loggedIn"));
   }, []);
 
-  const [usernameState, setUsernameState] = useState<string>("Username123");
-  const [nameState, setNameState] = useState<string>("Default Name");
-  const [phoneNumberState, setPhoneNumberState] = useState<string>("123456");
+  const [userNameState, setUserNameState] = useState<CookieValueTypes | string>(
+    () =>
+      checkCookieExists("userName") ? getCookie("userName") : "Default Username"
+  );
+
+  const [nameState, setNameState] = useState<CookieValueTypes | string>(() =>
+    checkCookieExists("name") ? getCookie("name") : "Default Name"
+  );
+  const [phoneNumberState, setPhoneNumberState] = useState<
+    CookieValueTypes | string
+  >(
+    checkCookieExists("phoneNumber")
+      ? getCookie("phoneNumber")
+      : "Default Phone Number"
+  );
 
   return loggedIn === "true" ? (
     <Container>
@@ -51,7 +46,7 @@ const MyAccountPage: React.FC = () => {
           <Col>
             <h4>More About Me</h4>
             <UserCard
-              username={usernameState}
+              username={userNameState}
               name={nameState}
               phoneNumber={phoneNumberState}
             />
@@ -79,7 +74,6 @@ const MyAccountPage: React.FC = () => {
           </Col>
         </Row>
       </Stack>
-      <Button onClick={() => {}}>LMAOOO</Button>
     </Container>
   ) : (
     <Container>

@@ -2,10 +2,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { postEndpointHelper } from "../utils/endpoint-utils";
+import { getCookie } from "cookies-next";
 
 const UploadAudio: React.FC = () => {
   const [uploadEnabledState, setUploadEnabledState] = useState<boolean>(false);
@@ -27,13 +27,19 @@ const UploadAudio: React.FC = () => {
   }, [audioDescriptionState, audioCategoryState, audioFileState]);
 
   async function handleAudioUpload() {
-    const response = await postEndpointHelper("upload-audio", {
-      audio_description: audioDescriptionState,
-      audio_category: audioCategoryState,
+    const resp = await postEndpointHelper("upload-audio-file", {
+      user_id: getCookie("userId"),
+      file_description: audioDescriptionState,
+      file_category: audioCategoryState,
       audio_file: audioFileState,
     });
-    const response_json = await response.json();
-    console.log(response_json);
+    const resp_json = await resp.json();
+    // 201 is the status code for successful creation of a resource
+    if (resp_json.status_code !== 200) {
+      throw alert(`Status code ${resp_json.status_code}: ${resp_json.message}`);
+    } else {
+      throw alert(resp_json.message);
+    }
   }
 
   return (
@@ -42,9 +48,14 @@ const UploadAudio: React.FC = () => {
         <Form.Label>Upload your audio files here.</Form.Label>
         <Form.Control
           type="file"
+          accept="audio/*"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setAudioFileState(e.target.files);
-            console.log(e.target.files);
+            if (e.target.files === null) {
+              // negate possibility of files list being null
+              return;
+            }
+            console.log(e.target.files[0]);
+            setAudioFileState(e.target.files[0]);
           }}
         />
       </Form.Group>
@@ -66,12 +77,12 @@ const UploadAudio: React.FC = () => {
         <Form.Control
           as="select"
           onChange={(e) => {
-            console.log("e.target.value", e.target.value);
             setAudioCategoryState(e.target.value);
           }}
         >
           <option value="music">Music</option>
           <option value="voicenote">Voice Note</option>
+          <option value="noise">Noise</option>
           <option value="others">Others</option>
         </Form.Control>
       </Form.Group>

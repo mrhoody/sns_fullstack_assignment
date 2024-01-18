@@ -1,10 +1,11 @@
 import Card from "react-bootstrap/Card";
+import { CookieValueTypes } from "cookies-next";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface UserCardProps {
-  username: string;
-  name: string;
-  phoneNumber: string;
+  username: CookieValueTypes | string;
+  name: CookieValueTypes | string;
+  phoneNumber: CookieValueTypes | string;
 }
 
 const UserCard: React.FC<UserCardProps> = (props) => {

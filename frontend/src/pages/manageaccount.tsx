@@ -16,17 +16,20 @@ const ManageAccountPage: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
 
   useLayoutEffect(() => {
-    setCookie("loggedIn", "true");
     setLoggedIn(getCookie("loggedIn"));
   }, []);
 
   const [updateEnabledState, setUpdateEnabledState] = useState<boolean>(false);
-  const [nameState, setNameState] = useState<string>("");
-  const [phoneNumberState, setPhoneNumberState] = useState<string>("");
-  const [passwordState, setPasswordState] = useState<string>("");
+  const [nameState, setNameState] = useState<CookieValueTypes | string>("");
+  const [phoneNumberState, setPhoneNumberState] = useState<
+    CookieValueTypes | string
+  >("");
+  const [passwordState, setPasswordState] = useState<CookieValueTypes | string>(
+    ""
+  );
 
   useEffect(() => {
-    if (nameState.length === 0 || phoneNumberState.length === 0) {
+    if (nameState?.length === 0 || phoneNumberState?.length === 0) {
       setUpdateEnabledState(false);
     } else {
       setUpdateEnabledState(true);
@@ -34,15 +37,29 @@ const ManageAccountPage: React.FC = () => {
   }, [nameState, phoneNumberState]);
 
   async function handleAccountUpdate() {
-    const resp = await postEndpointHelper("login", {
-      password: passwordState,
-      name: nameState,
-      phone_number: phoneNumberState,
+    // hardcode error handling for now
+    if (getCookie("userId") === undefined) {
+      throw alert(
+        `User ID is undefined! This means you have bypassed the login flow somehow. 
+        This is an error that Hud couldn't quite fix in time, sorry.`
+      );
+    }
+
+    const resp = await postEndpointHelper("update-account", {
+      user_id: getCookie("userId"),
+      new_password: passwordState,
+      new_name: nameState,
+      new_phone_number: phoneNumberState,
     });
     const resp_json = await resp.json();
-    if (resp.status !== 200) {
-      throw alert(resp_json.message);
+    if (resp_json.status_code !== 200) {
+      throw alert(
+        `Status code ${resp_json.status_code}: ${resp_json.message} `
+      );
     } else {
+      setCookie("name", resp_json.user_data.name);
+      setCookie("phoneNumber", resp_json.user_data.phone_number);
+      throw alert(resp_json.message);
     }
   }
 
@@ -52,14 +69,11 @@ const ManageAccountPage: React.FC = () => {
     });
     const resp_json = await resp.json();
     if (resp_json.status_code !== 200) {
-      throw alert(
-        `Status code ${resp_json.status_code}: ${resp_json.message} `
-      );
+      alert(`Status code ${resp_json.status_code}: ${resp_json.message}`);
     } else {
-      // redirect to login page
-      console.log(resp_json.message);
-      console.log(resp_json);
-      // window.location.href = "/login";
+      deleteAllCookies();
+      window.location.href = "/login";
+      alert(resp_json.message);
     }
   }
 
@@ -115,10 +129,6 @@ const ManageAccountPage: React.FC = () => {
                 type="button"
                 disabled={!updateEnabledState}
                 onClick={() => {
-                  // login logic here
-                  console.log("Update button clicked!");
-                  console.log("Name: " + nameState);
-                  console.log("Phone Number: " + phoneNumberState);
                   handleAccountUpdate();
                 }}
               >
@@ -139,11 +149,7 @@ const ManageAccountPage: React.FC = () => {
             <Button
               variant="danger"
               type="button"
-              onClick={() => {
-                // handleAccountDelete();
-                // deleteAllCookies();
-                setCookie("loggedIn", "true");
-              }}
+              onClick={handleAccountDelete}
             >
               Delete Account & Data
             </Button>

@@ -54,7 +54,16 @@ def handle_login(
         }
     # successful login
     else:
-        return {"message": "You have logged in!", "status_code": status.HTTP_200_OK}
+        return {
+            "message": "You have logged in!",
+            "status_code": status.HTTP_200_OK,
+            "user_data": {
+                "user_id": query_results[0][0],
+                "username": query_results[0][1],
+                "name": query_results[0][3],
+                "phone_number": query_results[0][4],
+            },
+        }
 
 
 @app.post("/create-account")
@@ -193,6 +202,8 @@ def handle_upload_audio(
             "file_name": audio_file.filename,
             "file_path": file_path,
             "file_type": file_type,
+            "file_category": file_category,
+            "file_description": file_description,
             "file_duration": file_duration,
             "file_bitrate": file_bitrate,
             "file_sample_rate": file_sample_rate,
@@ -214,10 +225,27 @@ def handle_view_audio_files(user_id: Annotated[str, Form(...)]):
             "status_code": status.HTTP_404_NOT_FOUND,
         }
     else:
+        # format query results as a list of objects for easier processing on the frontend
+        audio_files = []
+        for result in query_results:
+            file_info = {
+                "id": result[0],
+                "user_id": result[1],
+                "file_name": result[2],
+                "file_path": result[3],
+                "file_type": result[4],
+                "file_category": result[5],
+                "file_description": result[6],
+                "file_duration": result[7],
+                "file_bitrate": result[8],
+                "file_sample_rate": result[9],
+                "file_size": result[10],
+            }
+            audio_files.append(file_info)
         return {
             "message": "Audio files retrieved successfully!",
             "status_code": status.HTTP_200_OK,
-            "audio_files": query_results,
+            "audio_files": audio_files,
         }
 
 

@@ -29,14 +29,21 @@ const RegisterPage: React.FC = () => {
   }, [usernameState, passwordState, nameState, phoneNumberState]);
 
   async function handleRegister() {
-    const response = await postEndpointHelper("create-account", {
+    const resp = await postEndpointHelper("create-account", {
       username: usernameState,
       password: passwordState,
       name: nameState,
       phone_number: phoneNumberState,
     });
-    const response_json = await response.json();
-    console.log(response_json);
+    const resp_json = await resp.json();
+    if (resp_json.status_code !== 200) {
+      throw alert(
+        `Status code ${resp_json.status_code}: ${resp_json.message} `
+      );
+    } else {
+      window.location.href = "/login";
+      throw alert(resp_json.message);
+    }
   }
 
   return (
