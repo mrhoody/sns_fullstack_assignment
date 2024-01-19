@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useState, useEffect } from "react";
 import { postEndpointHelper } from "../utils/endpoint-utils";
+import Link from "next/link";
 
 const RegisterPage: React.FC = () => {
   const [registerEnabledState, setRegisterEnabledState] =
@@ -112,7 +113,7 @@ const RegisterPage: React.FC = () => {
 
           <Col>
             <p className="text-end">
-              Already a member? Log in <a href="/login">here.</a>
+              Already a member? Log in <Link href="/login">here.</Link>
             </p>
           </Col>
         </Row>

@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
           fontSize: "60px",
         }}
       >
-        Welcome to Hud's audio management system!
+        Welcome to Hud&aposs audio management system!
       </h1>
       <Image
         src="/cat_pic.jpg"
@@ -27,7 +28,7 @@ export default function Home() {
             fontSize: "48px",
           }}
         >
-          Click <a href="/login">here</a> to begin.
+          Click <Link href="/login">here</Link> to begin.
         </p>
       </h2>
     </main>

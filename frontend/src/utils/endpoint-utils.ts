@@ -5,8 +5,7 @@ export async function postEndpointHelper(
   // sends a POST request to the selected endpoint and appends the formdata to the request
   // sends the request as multipart/form-data to enable file uploads to FastApi
   const formData = new FormData();
-  //   const endpointUrl = `api:3000/${endpoint}`;
-  const endpointUrl = `http://localhost:5000/${endpoint}`;
+  const endpointUrl = `api/${endpoint}`;
   // append the requestData to the request
   for (const key in requestData) {
     formData.append(key, requestData[key]);
@@ -24,8 +23,7 @@ export async function postEndpointHelper(
 export async function getEndpointHelper(endpoint: string) {
   // sends a GET request to the selected endpoint
   // you can't append a form body to a get request
-  // const endpointUrl = `http://localhost:3000/${endpoint}`;
-  const endpointUrl = `http://0.0.0.0:5000/`;
+  const endpointUrl = `api:5000/`;
   // form the request
   const response = await fetch(endpointUrl, {
     method: "GET",

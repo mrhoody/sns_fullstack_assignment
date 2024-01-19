@@ -114,7 +114,7 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
             </tr>
           )}
           {files.map((file) => (
-            <tr id={`${file.file_name}`}>
+            <tr key={`${file.file_name}`}>
               <td>{file.id}</td>
               <td>{file.file_name}</td>
               <td>{file.file_type}</td>

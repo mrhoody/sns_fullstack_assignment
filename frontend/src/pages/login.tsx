@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import { postEndpointHelper } from "../utils/endpoint-utils";
 import { useState, useEffect } from "react";
 import { setCookie, getCookie } from "cookies-next";
+import Link from "next/link";
 
 const LoginPage: React.FC = () => {
   const [loginEnabledState, setLoginEnabledState] = useState<boolean>(false);
@@ -83,7 +84,7 @@ const LoginPage: React.FC = () => {
 
           <Col>
             <p className="text-end">
-              Not a member? <a href="/register">Sign up here!</a>
+              Not a member? <Link href="/register">Sign up here!</Link>
             </p>
           </Col>
         </Row>

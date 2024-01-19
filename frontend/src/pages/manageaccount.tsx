@@ -11,6 +11,7 @@ import { postEndpointHelper } from "../utils/endpoint-utils";
 import ProtectedRoute from "@/components/VerifyLogin";
 import { getCookie, setCookie, CookieValueTypes } from "cookies-next";
 import { deleteAllCookies } from "@/utils/cookie-utils";
+import Link from "next/link";
 
 const ManageAccountPage: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
@@ -141,7 +142,7 @@ const ManageAccountPage: React.FC = () => {
             </Col>
             <Col>
               <p className="text-end">
-                <a href="/me">Take me home.</a>
+                <Link href="/me">Take me home.</Link>
               </p>
             </Col>
           </Row>

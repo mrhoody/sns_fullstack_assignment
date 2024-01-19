@@ -12,6 +12,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import ProtectedRoute from "@/components/VerifyLogin";
 import { CookieValueTypes, getCookie } from "cookies-next";
 import { checkCookieExists } from "@/utils/cookie-utils";
+import Link from "next/link";
 
 const MyAccountPage: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
@@ -57,7 +58,7 @@ const MyAccountPage: React.FC = () => {
               name={nameState}
               phoneNumber={phoneNumberState}
             />
-            <a href="/manageaccount">Manage My Account</a>
+            <Link href="/manageaccount">Manage My Account</Link>
           </Col>
         </Row>
 

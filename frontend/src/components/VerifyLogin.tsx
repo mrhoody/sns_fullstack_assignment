@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const ProtectedRoute = () => {
@@ -5,7 +6,7 @@ const ProtectedRoute = () => {
     <div>
       <h1>You are not logged in.</h1>
       <p>
-        Please <a href="/login">login</a> to access the app.
+        Please <Link href="/login">login</Link> to access the app.
       </p>
     </div>
   );
