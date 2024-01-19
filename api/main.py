@@ -266,6 +266,7 @@ def playback_audio(audio_id: Annotated[str, Form(...)]):
     # retrieve file from disk
     file_path = query_results[0][3]
     file_name = query_results[0][2]
+    headers = {"Access-Control-Expose-Headers": "Content-Disposition"}
 
     # if file exists, return FileResponse using filepath
-    return FileResponse(file_path, headers={"filename": file_name})
+    return FileResponse(file_path, filename=file_name, headers=headers)

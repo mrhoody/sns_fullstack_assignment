@@ -7,8 +7,8 @@ services:
       - db:db
     depends_on:
       - db
-    # volumes:
-    #   - api_volume:/app/audio_files
+    volumes:
+      - api_volume:/app/audio_files
 
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
   db:
@@ -21,8 +21,9 @@ services:
   # links:
   #   - api:api
 
-# volumes:
-#   api_volume:
+# volume to store audio files
+volumes:
+  api_volume:
 
 networks:
   default:

@@ -1,8 +1,13 @@
-import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { postEndpointHelper } from "../utils/endpoint-utils";
 import { Col, Row } from "react-bootstrap";
 import { getCookie } from "cookies-next";
@@ -21,28 +26,64 @@ interface UploadedFilesInfo {
 }
 
 interface UploadFileDisplayProps {
-  uploaded_files?: UploadedFilesInfo[];
+  uploadedFiles?: UploadedFilesInfo[];
+  // selectedFileHandler will feed the name, generated URL of the selected file to the CustomAudioPlayer component
+  selectedFileHandler: Dispatch<SetStateAction<{ name: string; url: string }>>;
+  selectedFileState?: { name: string; url: string };
 }
 
 const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
   const [files, setFiles] = useState<UploadedFilesInfo[]>(
-    props.uploaded_files ? props.uploaded_files : []
+    props.uploadedFiles ? props.uploadedFiles : []
   );
+  const [selectedFileId, setSelectedFileId] = useState<string>("");
+  const [selectedFileName, setSelectedFileName] = useState<string>("");
 
   async function handleRetrieveFiles() {
     const response = await postEndpointHelper("view-audio-files", {
       user_id: getCookie("userId"),
     });
     const response_json = await response.json();
-    if (response_json.status_code !== 200) {
+    if (response_json.status_code === 404) {
+      // to avoid throwing an alert on page load
+    } else if (response_json.status_code !== 200) {
       throw alert(
         `Status code ${response_json.status_code}: ${response_json.message}`
       );
     } else {
       setFiles(response_json.audio_files);
-      console.log(response_json.audio_files);
     }
   }
+
+  async function handlePlaybackFiles() {
+    const response = await postEndpointHelper("playback-audio-file", {
+      audio_id: selectedFileId,
+    });
+    if (response.status === 200) {
+      const url = window.URL.createObjectURL(await response.blob());
+      props.selectedFileHandler({
+        name: selectedFileName,
+        url: url,
+      });
+      // const audio = new Audio(url);
+      // audio.play();
+    } else {
+      throw alert("Error fetching error file from server audio file!");
+    }
+  }
+
+  // loads files from the database on page load
+  useLayoutEffect(() => {
+    handleRetrieveFiles();
+  }, []);
+
+  // loads the selected file from the database
+  // useEffect used to ensure change in id occurs first before fetching the file
+  useEffect(() => {
+    if (selectedFileId !== "") {
+      handlePlaybackFiles();
+    }
+  }, [selectedFileId]);
 
   return (
     <>
@@ -65,15 +106,15 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
               <td colSpan={9}>
                 <center>
                   <u>
-                    No files uploaded! Click the button to retrieve your files
-                    if you have uploaded some.
+                    No files uploaded! Click the button to refresh & retrieve
+                    your files if you have uploaded some.
                   </u>
                 </center>
               </td>
             </tr>
           )}
           {files.map((file) => (
-            <tr>
+            <tr id={`${file.file_name}`}>
               <td>{file.id}</td>
               <td>{file.file_name}</td>
               <td>{file.file_type}</td>
@@ -84,7 +125,15 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
               <td>{Number(file.file_size / 1000000).toFixed(2)}</td>
               <td>
                 <center>
-                  <Button type="button">Click to Load Audio</Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setSelectedFileId(file.id);
+                      setSelectedFileName(file.file_name);
+                    }}
+                  >
+                    Click to Load Audio
+                  </Button>
                 </center>
               </td>
             </tr>

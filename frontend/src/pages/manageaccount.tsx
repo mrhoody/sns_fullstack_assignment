@@ -65,7 +65,7 @@ const ManageAccountPage: React.FC = () => {
 
   async function handleAccountDelete() {
     const resp = await postEndpointHelper("delete-account", {
-      user_id: "1",
+      user_id: getCookie("userId"),
     });
     const resp_json = await resp.json();
     if (resp_json.status_code !== 200) {
@@ -86,7 +86,11 @@ const ManageAccountPage: React.FC = () => {
           <Row>
             <Form.Group className="mb-3" controlId="formUpdateUsername">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Username" disabled />
+              <Form.Control
+                type="text"
+                placeholder={getCookie("userName")}
+                disabled
+              />
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
 

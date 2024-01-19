@@ -8,11 +8,10 @@ import UploadedFilesDisplay from "@/components/UploadedFilesDisplay";
 import CustomNavBar from "@/components/CustomNavBar";
 import UploadAudio from "@/components/UploadAudio";
 import UserCard from "@/components/UserCard";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import ProtectedRoute from "@/components/VerifyLogin";
 import { CookieValueTypes, getCookie } from "cookies-next";
 import { checkCookieExists } from "@/utils/cookie-utils";
-
 
 const MyAccountPage: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<CookieValueTypes>("false");
@@ -36,6 +35,14 @@ const MyAccountPage: React.FC = () => {
       ? getCookie("phoneNumber")
       : "Default Phone Number"
   );
+  const [selectedAudioFileState, setSelectedAudioFileState] = useState<{
+    name: string;
+    url: string;
+  }>({ name: "", url: "" });
+
+  useEffect(() => {
+    console.log(selectedAudioFileState);
+  }, [selectedAudioFileState]);
 
   return loggedIn === "true" ? (
     <Container>
@@ -43,8 +50,8 @@ const MyAccountPage: React.FC = () => {
       <h2>Welcome, {nameState}!</h2>
       <Stack gap={5}>
         <Row>
-          <Col>
-            <h4>More About Me</h4>
+          <Col lg={{ span: 3 }}>
+            <h4>My Profile</h4>
             <UserCard
               username={userNameState}
               name={nameState}
@@ -64,13 +71,16 @@ const MyAccountPage: React.FC = () => {
         <Row>
           <Col>
             <h4>My Audio</h4>
-            <UploadedFilesDisplay />
+            <UploadedFilesDisplay
+              selectedFileHandler={setSelectedAudioFileState}
+              selectedFileState={selectedAudioFileState}
+            />
           </Col>
         </Row>
 
         <Row>
           <Col>
-            <CustomAudioPlayer />
+            <CustomAudioPlayer fileDetails={selectedAudioFileState} />
           </Col>
         </Row>
       </Stack>
