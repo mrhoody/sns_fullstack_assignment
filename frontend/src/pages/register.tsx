@@ -36,7 +36,7 @@ const RegisterPage: React.FC = () => {
       name: nameState,
       phone_number: phoneNumberState,
     });
-    const resp_json = await resp.json();
+    const resp_json = await resp?.json();
     if (resp_json.status_code !== 200) {
       throw alert(
         `Status code ${resp_json.status_code}: ${resp_json.message} `

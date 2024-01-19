@@ -12,7 +12,7 @@ export default function Home() {
           fontSize: "60px",
         }}
       >
-        Welcome to Hud&aposs audio management system!
+        Welcome to Hud's audio management system!
       </h1>
       <Image
         src="/cat_pic.jpg"

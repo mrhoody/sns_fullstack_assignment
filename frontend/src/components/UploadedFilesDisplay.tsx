@@ -43,7 +43,7 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
     const response = await postEndpointHelper("view-audio-files", {
       user_id: getCookie("userId"),
     });
-    const response_json = await response.json();
+    const response_json = await response?.json();
     if (response_json.status_code === 404) {
       // to avoid throwing an alert on page load
     } else if (response_json.status_code !== 200) {
@@ -59,8 +59,8 @@ const UploadedFilesDisplay: React.FC<UploadFileDisplayProps> = (props) => {
     const response = await postEndpointHelper("playback-audio-file", {
       audio_id: selectedFileId,
     });
-    if (response.status === 200) {
-      const url = window.URL.createObjectURL(await response.blob());
+    if (response?.status === 200) {
+      const url = window.URL.createObjectURL(await response?.blob());
       props.selectedFileHandler({
         name: selectedFileName,
         url: url,

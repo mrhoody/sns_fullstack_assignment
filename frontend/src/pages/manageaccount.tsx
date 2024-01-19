@@ -52,7 +52,7 @@ const ManageAccountPage: React.FC = () => {
       new_name: nameState,
       new_phone_number: phoneNumberState,
     });
-    const resp_json = await resp.json();
+    const resp_json = await resp?.json();
     if (resp_json.status_code !== 200) {
       throw alert(
         `Status code ${resp_json.status_code}: ${resp_json.message} `
@@ -68,7 +68,7 @@ const ManageAccountPage: React.FC = () => {
     const resp = await postEndpointHelper("delete-account", {
       user_id: getCookie("userId"),
     });
-    const resp_json = await resp.json();
+    const resp_json = await resp?.json();
     if (resp_json.status_code !== 200) {
       alert(`Status code ${resp_json.status_code}: ${resp_json.message}`);
     } else {

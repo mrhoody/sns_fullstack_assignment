@@ -7,16 +7,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # allow CORS
 origins = [
-    "frontend",
-    "frontend:3000",
-    "frontend:3000/",
-    "frontend:3000/login",
-    "frontend:3000/create-account",
-    "frontend:3000/update-account",
-    "frontend:3000/delete-account",
-    "frontend:3000/upload-audio-file",
-    "frontend:3000/view-audio-files",
-    "frontend:3000/playback-audio-file",
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:3000/",
+    "http://localhost:3000/login",
+    "http://localhost:3000/create-account",
+    "http://localhost:3000/update-account",
+    "http://localhost:3000/delete-account",
+    "http://localhost:3000/upload-audio-file",
+    "http://localhost:3000/view-audio-files",
+    "http://localhost:3000/playback-audio-file",
 ]
 
 app = FastAPI()
@@ -32,7 +32,10 @@ audio_file_path = os.path.join(os.getcwd(), "audio_files")
 
 @app.get("/")
 async def root():
-    return {"message": "Hi Hud!", "status_code": status.HTTP_200_OK}
+    return {
+        "message": "Hi Hud! The db container is functioning.",
+        "status_code": status.HTTP_200_OK,
+    }
 
 
 @app.post("/login")

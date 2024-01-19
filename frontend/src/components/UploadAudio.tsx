@@ -33,7 +33,7 @@ const UploadAudio: React.FC = () => {
       file_category: audioCategoryState,
       audio_file: audioFileState,
     });
-    const resp_json = await resp.json();
+    const resp_json = await resp?.json();
     // 201 is the status code for successful creation of a resource
     if (resp_json.status_code !== 200) {
       throw alert(`Status code ${resp_json.status_code}: ${resp_json.message}`);

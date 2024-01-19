@@ -1,29 +1,27 @@
 services:
   api:
+    image: mrhoody/hud_sns_api
     build: ./api
-    # ports:
-    #   - "5000:5000"
-    links:
-      - db:db
+    ports:
+      - "5000:5000"
     depends_on:
       - db
     volumes:
       - api_volume:/app/audio_files
-
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+
   db:
+    image: mrhoody/hud_sns_db
     build: ./db
-    # ports:
-    #   - "5432:5432"
+
   frontend:
+    image: mrhoody/hud_sns_frontend
     build: ./frontend
-    links:
-      - api:api
     depends_on:
       - api
     ports:
       - "3000:3000"
-    command: []
+    command: ["npm", "run", "dev"]
 
 # volume to store audio files
 volumes:
